@@ -1,33 +1,25 @@
 const { PrismaClient } = require('@prisma/client');
+const { customAlphabet } = require('nanoid');
+
 const prisma = new PrismaClient();
+const nanoid = customAlphabet('abcdefghijklmnopqrstuvwxyz0123456789', 10); // 10-character ID
 
 async function main() {
-  // Create a user
+  const customId = `user_${nanoid()}`;
+
   const user = await prisma.user.create({
     data: {
+      id: customId,
       name: 'Alice Gupta',
       email: 'alice@example.com',
+      isVerified: true,
+      lastLogin: new Date(),
     },
   });
 
-  // Create a project for that user
-  const project = await prisma.project.create({
-    data: {
-      repoName: 'github-cloner',
-      repoUrl: 'https://github.com/example/github-cloner',
-      userId: user.id, // links to the user above
-    },
-  });
-
-  console.log('User:', user);
-  console.log('Project:', project);
+  console.log('Created User:', user);
 }
 
 main()
-  .catch((e) => {
-    console.error(e);
-    process.exit(1);
-  })
-  .finally(async () => {
-    await prisma.$disconnect();
-  });
+  .catch(e => console.error(e))
+  .finally(() => prisma.$disconnect());

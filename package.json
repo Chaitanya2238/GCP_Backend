@@ -13,6 +13,8 @@
     "prisma": "^6.11.1"
   },
   "dependencies": {
-    "@prisma/client": "^6.11.1"
+    "@prisma/client": "^6.11.1",
+    "cuid": "^3.0.0",
+    "nanoid": "^5.1.5"
   }
 }
